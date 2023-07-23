@@ -1,0 +1,27 @@
+{
+    "name": "gquemener/unused-argument",
+    "description": "PhpStan extension to detect unused function argument",
+    "type": "phpstan-extension",
+    "require": {
+        "phpstan/phpstan": "^1.10"
+    },
+    "require-dev": {
+        "behat/behat": "^3.13"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Gquemener\\UnusedArgument\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Gildas Quéméner",
+            "email": "gildas.quemener@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "config": {
+        "bin-dir": "bin"
+    }
+}
