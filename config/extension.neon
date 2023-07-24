@@ -1,0 +1,12 @@
+services:
+    -
+        class: Gquemener\UnusedArgument\Collector\ArgumentDeclarationCollector
+        tags:
+            - phpstan.collector
+    -
+        class: Gquemener\UnusedArgument\Collector\ArgumentUsageCollector
+        tags:
+            - phpstan.collector
+
+rules:
+    - Gquemener\UnusedArgument\Rules\UnusedFunctionArgumentRule
