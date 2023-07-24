@@ -55,9 +55,15 @@ class FeatureContext implements Context
     /**
      * @Then I should see :count violation(s)
      */
-    public function iShouldSeeViolation(int $count): void
+    public function iShouldSeeViolation(int|string $count): void
     {
-        if (!str_contains($this->outputs['out'], sprintf('Found %d error', $count))) {
+        $pattern = sprintf('Found %d error', $count);
+
+        if ('no' === $count) {
+            $pattern = '[OK]';
+        }
+
+        if (!str_contains($this->outputs['out'], $pattern)) {
             echo '=== STDOUT ===' . "\n";
             echo $this->outputs['out'] . "\n";
             echo '=== STDERR ===' . "\n";

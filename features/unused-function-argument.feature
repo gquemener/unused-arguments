@@ -13,6 +13,18 @@ Feature: Detect unused function argument
       return $a + $b;
     }
     """
-    And the unused-argument PHPStan extension is enabled 
     When I run phpstan on file "index.php"
     Then I should see 1 violation
+
+  Scenario: Successfully detect no error when all function arguments are used
+    Given the following "index.php" file:
+    """
+    <?php
+
+    function add(int $a, int $b): int
+    {
+      return $a + $b;
+    }
+    """
+    When I run phpstan on file "index.php"
+    Then I should see no violation
