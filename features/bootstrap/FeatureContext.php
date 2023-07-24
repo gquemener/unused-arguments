@@ -27,18 +27,24 @@ class FeatureContext implements Context
     }
 
     /**
-     * @Given the following :filename file:
+     * @Given file :filename contains the following valid php:
      */
-    public function theFollowingFile(string $filename, PyStringNode $content): void
+    public function fileContainsTheFollowingValidPhp(string $filename, PyStringNode $content): void
     {
-        file_put_contents($this->rootFs . DIRECTORY_SEPARATOR . $filename, (string) $content);
-    }
+        $filePath =$this->rootFs . DIRECTORY_SEPARATOR . $filename;
+        file_put_contents($filePath, (string) $content);
 
-    /**
-     * @Given the unused-argument PHPStan extension is enabled
-     */
-    public function theUnusedArgumentPhpstanExtensionIsEnabled(): void
-    {
+        $process = Process::fromShellCommandline(sprintf('php -l %s', $filePath));
+        $output = [];
+        $exitCode = $process->run(function($type, $bytes) use (&$output): void {
+            $output[] = sprintf('%s: %s', $type, $bytes);
+        });
+
+        if (0 !== $exitCode) {
+            echo implode('', $output);
+
+            throw new LogicException('File does not contain valid PHP.');
+        }
     }
 
     /**
