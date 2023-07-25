@@ -4,7 +4,7 @@ Feature: Detect unused method argument
   I need to be able to detect method argument that are never used
 
   Scenario: Successfully detect no error when all method arguments are used
-    Given file "Train.php" contains the following valid php:
+    Given the following valid php:
     """
     <?php
 
@@ -34,5 +34,5 @@ Feature: Detect unused method argument
       }
     }
     """
-    When I run phpstan on file "Train.php"
+    When PHPStan analyses it
     Then I should see no violation

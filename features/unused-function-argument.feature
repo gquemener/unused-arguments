@@ -4,7 +4,7 @@ Feature: Detect unused function argument
   I need to be able to detect function argument that are never used
 
   Scenario: Successfully detect an unused function argument
-    Given file "index.php" contains the following valid php:
+    Given the following valid php:
     """
     <?php
 
@@ -13,11 +13,11 @@ Feature: Detect unused function argument
       return $a + $b;
     }
     """
-    When I run phpstan on file "index.php"
+    When PHPStan analyses it
     Then I should see 1 violation
 
   Scenario: Successfully detect no error when all function arguments are used
-    Given file "index.php" contains the following valid php:
+    Given the following valid php:
     """
     <?php
 
@@ -26,11 +26,11 @@ Feature: Detect unused function argument
       return $a + $b;
     }
     """
-    When I run phpstan on file "index.php"
+    When PHPStan analyses it
     Then I should see no violation
 
   Scenario: Successfully detect unused argument in namespaced function
-    Given file "index.php" contains the following valid php:
+    Given the following valid php:
     """
     <?php
 
@@ -50,5 +50,5 @@ Feature: Detect unused function argument
       }
     }
     """
-    When I run phpstan on file "index.php"
+    When PHPStan analyses it
     Then I should see 1 violation

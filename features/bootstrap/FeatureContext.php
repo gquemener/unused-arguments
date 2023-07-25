@@ -10,7 +10,7 @@ use Symfony\Component\Process\Process;
  */
 class FeatureContext implements Context
 {
-    private string $rootFs;
+    private string $phpFile;
 
     private array $outputs = [
         'out' => '',
@@ -19,22 +19,17 @@ class FeatureContext implements Context
 
     public function __construct()
     {
-        $this->rootFs = tempnam(sys_get_temp_dir(), 'unused-argument');
-        if (file_exists($this->rootFs)) {
-            unlink($this->rootFs);
-        }
-        mkdir($this->rootFs);
+        $this->phpFile = tempnam(sys_get_temp_dir(), 'unused-argument');
     }
 
     /**
-     * @Given file :filename contains the following valid php:
+     * @Given the following valid PHP:
      */
-    public function fileContainsTheFollowingValidPhp(string $filename, PyStringNode $content): void
+    public function theFollowingValidPHP(PyStringNode $content): void
     {
-        $filePath =$this->rootFs . DIRECTORY_SEPARATOR . $filename;
-        file_put_contents($filePath, (string) $content);
+        file_put_contents($this->phpFile, (string) $content);
 
-        $process = Process::fromShellCommandline(sprintf('php -l %s', $filePath));
+        $process = Process::fromShellCommandline(sprintf('php -l %s', $this->phpFile));
         $output = [];
         $exitCode = $process->run(function($type, $bytes) use (&$output): void {
             $output[] = sprintf('%s: %s', $type, $bytes);
@@ -48,11 +43,11 @@ class FeatureContext implements Context
     }
 
     /**
-     * @When I run phpstan on file :filename
+     * @When PHPStan analyses it
      */
-    public function iRunPhpstanOnFile(string $filename): void
+    public function phpstanAnalysesIt()
     {
-        $process = Process::fromShellCommandline(sprintf('bin/phpstan analyse %s/%s', $this->rootFs, $filename));
+        $process = Process::fromShellCommandline(sprintf('bin/phpstan analyse %s', $this->phpFile));
         $process->run(function($type, $bytes): void {
             $this->outputs[$type] .= $bytes;
         });
